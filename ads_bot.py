@@ -13,7 +13,7 @@ from html import escape
 from datetime import datetime, timedelta
 import pytz
 
-BOT_TOKEN = os.getenv("8027278540:AAGhpK7NOV0HPZKKlDR-QrRN1NW2LTbq7FE")  # safer
+BOT_TOKEN = os.getenv("8027278540:AAH91oOZa8RxmRnx_mNIsIMFcjXoCfbCceE")  # safer
 CHANNELS = [
     "@programming_adda", "@telugu_movies_worldz", "@bmrinfotechdeals",
     "@TollywoodMatters", "@hotdeelss", "@hemoviess"
