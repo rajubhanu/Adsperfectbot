@@ -1,5 +1,4 @@
 import logging
-import os
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -10,26 +9,26 @@ from telegram.ext import (
 )
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from html import escape
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
 
 BOT_TOKEN = "8027278540:AAH91oOZa8RxmRnx_mNIsIMFcjXoCfbCceE"
+
 CHANNELS = [
     "@programming_adda", "@telugu_movies_worldz", "@bmrinfotechdeals",
     "@TollywoodMatters", "@hotdeelss", "@hemoviess"
 ]
-ADMIN_ID = 1367831694
+
 ADS_FILE = "ads.txt"
 timezone = pytz.timezone("Asia/Kolkata")
+ads = []
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-ads = []
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🤖 Welcome to AdsPerfect!\n📤 Send your ad with image, text or PDF.\n📌 It will be auto-posted to all our channels."
+        "🤖 Welcome to AdsPerfect!\n📤 Send your ad with image, text, or PDF.\n📌 It will be auto-posted to all our channels."
     )
 
 def save_ad(ad):
@@ -47,7 +46,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     text = escape(text)
-    media = None
     ad = {"text": text, "time": datetime.now(timezone).isoformat()}
 
     if msg.document:
@@ -90,7 +88,7 @@ def main():
     scheduler.add_job(auto_delete_ads, "interval", hours=1)
     scheduler.start()
 
-    logger.info("Bot started...")
+    logger.info("🚀 Bot started...")
     app.run_polling()
 
 if __name__ == "__main__":
