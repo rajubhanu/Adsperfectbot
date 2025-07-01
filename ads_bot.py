@@ -25,10 +25,7 @@ logger = logging.getLogger(__name__)
 ads = []
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("🤖 Welcome to AdsPerfect!")
-
-📤 Send your ad with image, text or PDF.
-📌 It will be auto-posted to all our channels.")
+    await update.message.reply_text("🤖 Welcome to AdsPerfect!📤 Send your ad with image, text or PDF.📌 It will be auto-posted to all our channels.")
 
 def save_ad(ad):
     with open(ADS_FILE, "a", encoding="utf-8") as f:
