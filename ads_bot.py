@@ -88,10 +88,10 @@ async def main():
     scheduler.add_job(auto_delete_ads, "interval", hours=1)
     scheduler.start()
 
-    logger.info("Bot started...")
     await application.run_polling()
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 
 
