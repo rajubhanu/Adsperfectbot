@@ -81,7 +81,7 @@ def auto_delete_ads():
             f.write(str(ad) + "\n")
     logger.info("🧹 Old ads cleaned.")
 
-def main():
+async def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
@@ -93,8 +93,9 @@ def main():
     scheduler.start()
 
     logger.info("Bot started...")
-    app.run_polling()
+    await app.run_polling()
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())
 
