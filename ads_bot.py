@@ -1,12 +1,7 @@
 import logging
+import asyncio
 from telegram import Update
-from telegram.ext import (
-    ApplicationBuilder,
-    CommandHandler,
-    MessageHandler,
-    ContextTypes,
-    filters
-)
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from html import escape
 from datetime import datetime, timedelta
@@ -81,21 +76,23 @@ def auto_delete_ads():
             f.write(str(ad) + "\n")
     logger.info("🧹 Old ads cleaned.")
 
-async def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    app.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, handle_message))
+
+async def main():
+    application = Application.builder().token(BOT_TOKEN).build()
+
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    application.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, handle_message))
 
     scheduler = AsyncIOScheduler()
     scheduler.add_job(auto_delete_ads, "interval", hours=1)
     scheduler.start()
 
     logger.info("Bot started...")
-    await app.run_polling()
+    await application.run_polling()
 
 if __name__ == "__main__":
-    import asyncio
     asyncio.run(main())
+
 
