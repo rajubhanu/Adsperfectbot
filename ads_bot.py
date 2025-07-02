@@ -77,7 +77,6 @@ def auto_delete_ads():
     logger.info("🧹 Old ads cleaned.")
 
 
-
 async def main():
     application = Application.builder().token(BOT_TOKEN).build()
 
