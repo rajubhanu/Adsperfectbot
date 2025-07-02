@@ -74,18 +74,26 @@ async def auto_delete_ads():
 
 
 def main():
+    def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+
+    # Start the bot
+    app.run_polling()
+    #app = ApplicationBuilder().token(BOT_TOKEN).build()
+
+    #app.add_handler(CommandHandler("start", start))
+    #app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
 
     # Scheduler setup (if needed)
-    scheduler = AsyncIOScheduler()
-    scheduler.add_job(auto_delete_ads, "interval", hours=1)
-    scheduler.start()
+    #scheduler = AsyncIOScheduler()
+    #scheduler.add_job(auto_delete_ads, "interval", hours=1)
+    #scheduler.start()
 
-    logger.info("Bot started...")
-    app.run_polling()
+    #logger.info("Bot started...")
+    #app.run_polling()
 
 if __name__ == "__main__":
     main()
