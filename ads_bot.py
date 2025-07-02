@@ -1,4 +1,4 @@
-import loggingAdd commentMore actions
+import logging
 import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from datetime import datetimeAdd commentMore actions
 import pytz
 import os
-
 BOT_TOKEN = "8027278540:AAH91oOZa8RxmRnx_mNIsIMFcjXoCfbCceE"
 CHANNELS = [
     "@programming_adda", "@telugu_movies_worldz", "@bmrinfotechdeals",
@@ -16,11 +15,9 @@ CHANNELS = [
 ]
 timezone = pytz.timezone("Asia/Kolkata")
 ADS_FILE = "ads.txt"
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 ads = []
-
 ADMIN_ID = 1367831694  # ✅ Your Telegram user ID
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
