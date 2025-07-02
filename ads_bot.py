@@ -1,10 +1,18 @@
+
 import logging
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 from telegram import Update
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    ContextTypes,
+    filters
+)
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from html import escape
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
+import os
 
 BOT_TOKEN = "8027278540:AAH91oOZa8RxmRnx_mNIsIMFcjXoCfbCceE"
 
@@ -13,16 +21,18 @@ CHANNELS = [
     "@TollywoodMatters", "@hotdeelss", "@hemoviess"
 ]
 
+ADMIN_ID = 1367831694
 ADS_FILE = "ads.txt"
 timezone = pytz.timezone("Asia/Kolkata")
-ads = []
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+ads = []
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🤖 Welcome to AdsPerfect!\n📤 Send your ad with image, text, or PDF.\n📌 It will be auto-posted to all our channels."
+        "🤖 Welcome to Ads Bot!\nSend your ad with text/image or document."
     )
 
 def save_ad(ad):
@@ -36,7 +46,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = msg.caption or msg.text or ""
     if not text.strip():
-        await msg.reply_text("❌ Please send some text or caption.")
+        await msg.reply_text("❌ Please include some text.")
         return
 
     text = escape(text)
@@ -63,7 +73,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await msg.reply_text("✅ Ad posted to all channels!")
 
-async def auto_delete_ads():
+def auto_delete_ads():
     global ads
     now = datetime.now(timezone)
     ads = [ad for ad in ads if (now - datetime.fromisoformat(ad['time'])).total_seconds() < 3600]
@@ -72,28 +82,20 @@ async def auto_delete_ads():
             f.write(str(ad) + "\n")
     logger.info("🧹 Old ads cleaned.")
 
-
 def main():
-    def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, handle_message))
 
-    # Start the bot
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(auto_delete_ads, "interval", hours=1)
+    scheduler.start()
+
+    logger.info("Bot started...")
     app.run_polling()
-    #app = ApplicationBuilder().token(BOT_TOKEN).build()
-
-    #app.add_handler(CommandHandler("start", start))
-    #app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
-
-    # Scheduler setup (if needed)
-    #scheduler = AsyncIOScheduler()
-    #scheduler.add_job(auto_delete_ads, "interval", hours=1)
-    #scheduler.start()
-
-    #logger.info("Bot started...")
-    #app.run_polling()
 
 if __name__ == "__main__":
     main()
+
