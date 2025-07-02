@@ -1,5 +1,5 @@
 import logging
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 from telegram import Update
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from html import escape
